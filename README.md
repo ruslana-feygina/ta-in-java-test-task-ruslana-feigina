@@ -14,7 +14,7 @@ Automation project for testing the **SauceDemo login page** using **Java**, **Se
 | Build Tool | Maven |
 | Logging | SLF4J |
 | Design Patterns | Page Object, Singleton |
-| Browsers | Chrome, Firefox |
+| Browsers | Chrome, Firefox , Edge |
 | Parallel Execution | Supported (TestNG XML) |
 
 ---
