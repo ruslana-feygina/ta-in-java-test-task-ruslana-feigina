@@ -7,12 +7,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class DriverSingleton {
 
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static final Logger log = LoggerFactory.getLogger(DriverSingleton.class);
-
 
     private DriverSingleton() {}
 
