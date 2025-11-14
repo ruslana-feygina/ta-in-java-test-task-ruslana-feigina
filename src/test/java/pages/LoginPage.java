@@ -4,14 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
+public class LoginPage extends AbstractPage {
 
-public class LoginPage {
-
-    private WebDriver driver;
-    private WebDriverWait wait;
+    private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
 
     private final By usernameInput = By.cssSelector("#user-name");
     private final By passwordInput = By.cssSelector("#password");
@@ -20,18 +18,14 @@ public class LoginPage {
     private final By appLogo = By.cssSelector(".app_logo");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        initElements();
+       super(driver);
     }
 
-    private void initElements() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+    public LoginPage open() {
+        log.info("Opening login page");
+        driver.get("https://www.saucedemo.com/");
+        return this;
     }
-
-    private WebElement getUsernameInput() { return driver.findElement(usernameInput); }
 
     public void clearUsernameInput() { getUsernameInput().clear(); }
 
@@ -39,35 +33,17 @@ public class LoginPage {
 
     public void setUsernameInput(String email) { getUsernameInput().sendKeys(email); }
 
-    private WebElement getPasswordInput() { return driver.findElement(passwordInput); }
-
     public void clearPasswordInput() { getPasswordInput().clear(); }
 
     public void clickPasswordInput() { getPasswordInput().click(); }
 
     public void setPasswordInput(String password) { getPasswordInput().sendKeys(password); }
 
-    private WebElement getLoginButton() { return driver.findElement(loginButton); }
-
     public void clickLoginButton() { getLoginButton().click(); }
 
-    private WebElement getErrorMessageContainer() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        return driver.findElement(errorMessage);
-    }
-
-    public String getErrorMessageText() { return getErrorMessageContainer().getText(); }
-
-    public boolean isErrorMessageVisible() {
-        try {
-            return getErrorMessageContainer().isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    private void enterUsername(String email) {
+    public void enterUsername(String email) {
         clickUsernameInput();
-        clearUsernameInput();;
+        clearUsernameInput();
         setUsernameInput(email);
     }
 
@@ -83,8 +59,38 @@ public class LoginPage {
         clickLoginButton();
     }
 
+    public String getErrorMessageText() {
+        return getErrorMessageContainer().getText();
+    }
+
+    public boolean isErrorMessageVisible() {
+        try {
+            return getErrorMessageContainer().isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public String getAppLogoText() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(appLogo));
         return driver.findElement(appLogo).getText();
+    }
+
+    @Override
+    protected void waitForPageToLoad() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameInput));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+    }
+
+    private WebElement getUsernameInput() { return driver.findElement(usernameInput); }
+
+    private WebElement getPasswordInput() { return driver.findElement(passwordInput); }
+
+    private WebElement getLoginButton() { return driver.findElement(loginButton); }
+
+    private WebElement getErrorMessageContainer() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        return driver.findElement(errorMessage);
     }
 }

@@ -1,6 +1,6 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
+import driver.BrowserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -9,23 +9,19 @@ import pages.LoginPage;
 import driver.DriverSingleton;
 
 public class LoginTest {
-    private WebDriver driver;
-    private  LoginPage loginPage;
+    private LoginPage loginPage;
     private static final Logger log = LoggerFactory.getLogger(LoginTest.class);
 
     @Parameters("browser")
     @BeforeMethod
     public void setUp(@Optional("chrome") String browser) {
-        driver = DriverSingleton.getDriver(browser);
-        driver.get("https://www.saucedemo.com/");
-        loginPage = new LoginPage(driver);
-        log.info("Opening login page in {}", browser);
+        BrowserType browserType = BrowserType.valueOf(browser.toUpperCase());
+        loginPage = new LoginPage(DriverSingleton.getDriver(browserType)).open();
     }
 
     @AfterMethod
     public void tearDown() {
         DriverSingleton.closeDriver();
-        log.info("Closing browser");
     }
 
     @DataProvider(name = "invalidCredentials")
@@ -35,6 +31,7 @@ public class LoginTest {
                 {"standard_user", "", "Password is required"}
         };
     }
+
     @Test(dataProvider = "invalidCredentials")
     public void testLoginWithInvalidCredentials(String username, String password, String expectedMessage) {
         log.info("UC-1; UC-2: Testing login with invalid credentials: user='{}', pass='{}'", username, password);

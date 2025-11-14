@@ -14,4 +14,11 @@
             <class name="tests.LoginTest"/>
         </classes>
     </test>
+
+    <test name="Edge Test">
+        <parameter name="browser" value="EDGE"/>
+        <classes>
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
 </suite>
